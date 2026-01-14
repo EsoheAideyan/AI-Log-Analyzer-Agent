@@ -1,0 +1,25 @@
+[2024-01-15 08:30:15] INFO PLC_Controller: System startup initiated
+[2024-01-15 08:30:16] INFO NetworkManager: Connected to deviceId=PLC_001
+[2024-01-15 08:30:20] INFO SensorArray: All sensors initialized successfully
+[2024-01-15 08:31:45] WARN TemperatureSensor: Reading above normal range: 85.3°C (threshold: 80°C)
+[2024-01-15 08:32:10] INFO DataLogger: Logging interval set to 5 seconds
+[2024-01-15 08:33:22] ERROR NetworkManager: Connection timeout to deviceId=PLC_002
+[2024-01-15 08:33:25] ERROR NetworkManager: Failed to establish connection with asset=PLC_002 after 3 retries
+[2024-01-15 08:34:00] INFO BackupSystem: Backup process started
+[2024-01-15 08:34:15] WARN PressureSensor: Pressure reading unstable: 145.2 PSI (variance: 12.3)
+[2024-01-15 08:35:30] INFO PLC_Controller: Production line 1 started
+[2024-01-15 08:36:45] ERROR MotorController: Overcurrent detected on motor asset=MOTOR_03
+[2024-01-15 08:36:46] ERROR MotorController: Emergency stop activated for deviceId=MOTOR_03
+[2024-01-15 08:37:00] WARN NetworkManager: High latency detected: 245ms (normal: <100ms)
+[2024-01-15 08:37:30] INFO DataLogger: 1000 records written successfully
+[2024-01-15 08:38:15] ERROR DatabaseConnector: Failed to write to database: Connection refused
+[2024-01-15 08:38:20] WARN TemperatureSensor: Temperature rising rapidly: 78.5°C → 82.1°C in 30 seconds
+[2024-01-15 08:39:00] INFO NetworkManager: Reconnection successful to deviceId=PLC_002
+[2024-01-15 08:39:45] INFO BackupSystem: Backup completed successfully
+[2024-01-15 08:40:10] ERROR SensorArray: Sensor asset=SENSOR_07 reporting invalid data
+[2024-01-15 08:40:15] WARN SensorArray: Sensor calibration required for deviceId=SENSOR_07
+[2024-01-15 08:41:00] INFO PLC_Controller: Production line 1 running normally
+[2024-01-15 08:42:30] ERROR NetworkManager: Packet loss detected: 15% (threshold: 5%)
+[2024-01-15 08:43:00] INFO SystemMonitor: All systems operational
+[2024-01-15 08:44:15] WARN TemperatureSensor: Temperature stabilized at 79.8°C
+[2024-01-15 08:45:00] INFO DataLogger: Daily report generated

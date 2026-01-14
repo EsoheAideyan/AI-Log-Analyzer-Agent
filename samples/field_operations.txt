@@ -1,0 +1,24 @@
+2024-01-15T09:00:00 INFO FieldController: Morning shift started
+2024-01-15T09:00:15 INFO FieldController: All field units reporting online
+2024-01-15T09:05:30 WARN PumpStation: Low pressure detected at asset=PUMP_A
+2024-01-15T09:06:00 INFO PumpStation: Pressure adjustment initiated for deviceId=PUMP_A
+2024-01-15T09:10:45 ERROR ValveController: Valve asset=VALVE_12 failed to open
+2024-01-15T09:11:00 ERROR ValveController: Manual intervention required for deviceId=VALVE_12
+2024-01-15T09:15:20 INFO FlowMeter: Flow rate normal: 125.3 L/min
+2024-01-15T09:20:00 WARN TemperatureMonitor: Temperature fluctuation detected: ±3.2°C
+2024-01-15T09:25:10 INFO FieldController: Scheduled maintenance check completed
+2024-01-15T09:30:45 ERROR CommunicationHub: Lost connection to remote site asset=SITE_B
+2024-01-15T09:31:00 ERROR CommunicationHub: Attempting reconnection to deviceId=SITE_B
+2024-01-15T09:32:15 WARN PressureSensor: Pressure reading below minimum: 45.2 PSI (min: 50 PSI)
+2024-01-15T09:35:00 INFO FieldController: Data synchronization completed
+2024-01-15T09:40:30 ERROR MotorController: Vibration alarm triggered on motor asset=MOTOR_05
+2024-01-15T09:40:35 ERROR MotorController: Motor deviceId=MOTOR_05 shutdown for safety
+2024-01-15T09:45:00 INFO BackupSystem: Incremental backup started
+2024-01-15T09:50:15 WARN NetworkMonitor: Bandwidth usage high: 85% (threshold: 80%)
+2024-01-15T09:55:00 INFO FieldController: All systems operating within parameters
+2024-01-15T10:00:30 ERROR DatabaseConnector: Database write error: Disk full
+2024-01-15T10:01:00 WARN DatabaseConnector: Switching to backup storage
+2024-01-15T10:05:45 INFO CommunicationHub: Connection restored to deviceId=SITE_B
+2024-01-15T10:10:00 INFO FieldController: Mid-morning status check: All systems OK
+2024-01-15T10:15:20 WARN PumpStation: Pump efficiency decreased: 78% (normal: >85%)
+2024-01-15T10:20:00 INFO FieldController: Production metrics logged successfully

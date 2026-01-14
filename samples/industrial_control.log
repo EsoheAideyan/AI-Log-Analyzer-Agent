@@ -1,0 +1,26 @@
+2024-01-15 11:00:00 INFO ControlSystem: System initialized
+2024-01-15 11:00:05 INFO ControlSystem: Loading configuration from file
+2024-01-15 11:00:10 INFO ControlSystem: Configuration loaded successfully
+2024-01-15 11:00:15 WARN ControlSystem: Some optional modules not available
+2024-01-15 11:00:20 INFO NetworkInterface: Starting network services
+2024-01-15 11:00:25 INFO NetworkInterface: Listening on port 502
+2024-01-15 11:00:30 ERROR DeviceManager: Failed to initialize device asset=DEVICE_08
+2024-01-15 11:00:35 ERROR DeviceManager: Device deviceId=DEVICE_08 not responding to ping
+2024-01-15 11:00:40 INFO SensorNetwork: Scanning for sensors...
+2024-01-15 11:00:45 INFO SensorNetwork: Found 12 sensors online
+2024-01-15 11:00:50 WARN SensorNetwork: Sensor asset=SENSOR_04 reporting delayed responses
+2024-01-15 11:01:00 INFO ControlSystem: Entering operational mode
+2024-01-15 11:01:05 ERROR AlarmSystem: Critical alarm triggered: High temperature
+2024-01-15 11:01:10 ERROR AlarmSystem: Temperature exceeded threshold: 95.2°C (max: 90°C) at deviceId=TEMP_SENSOR_01
+2024-01-15 11:01:15 INFO ControlSystem: Emergency cooling activated
+2024-01-15 11:01:20 WARN ControlSystem: System performance degraded due to cooling load
+2024-01-15 11:01:25 INFO DataLogger: Alarm event logged
+2024-01-15 11:01:30 INFO ControlSystem: Temperature stabilizing
+2024-01-15 11:01:35 WARN SensorNetwork: Sensor calibration overdue for asset=SENSOR_04
+2024-01-15 11:01:40 INFO ControlSystem: Normal operation resumed
+2024-01-15 11:02:00 INFO NetworkInterface: Client connected from 192.168.1.100
+2024-01-15 11:02:05 ERROR SecurityModule: Unauthorized access attempt detected
+2024-01-15 11:02:10 WARN SecurityModule: Multiple failed login attempts from 192.168.1.100
+2024-01-15 11:02:15 INFO SecurityModule: IP address 192.168.1.100 blocked
+2024-01-15 11:02:20 INFO ControlSystem: Security event handled successfully
+2024-01-15 11:02:25 INFO ControlSystem: System status: Operational
