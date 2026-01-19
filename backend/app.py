@@ -37,6 +37,14 @@ app.add_middleware(
 init_db()
 index = EmbeddingIndex(index_path='./data/faiss.index', meta_db='./data/metadata.db')
 
+@app.get("/api/debug/env")
+async def debug_env():
+    return JSONResponse({
+        "OPENAI_API_KEY_exists": OPENAI_API_KEY is not None,
+        "OPENAI_API_KEY_length": len(OPENAI_API_KEY) if OPENAI_API_KEY else 0,
+        "OPENAI_API_KEY_starts_with_sk": OPENAI_API_KEY.startswith('sk-') if OPENAI_API_KEY else False,
+        "OPENAI_MODEL": OPENAI_MODEL
+})
 
 @app.post("/api/upload")
 async def upload(file: UploadFile = File(...)):
@@ -123,29 +131,43 @@ async def ask(payload: dict):
         # Only pass api_key explicitly, let the library handle defaults
         client = OpenAI(api_key=OPENAI_API_KEY)
         
-        # Make the API call with timeout
+        # Make the API call (removed timeout parameter to avoid version issues)
         llm_response = client.chat.completions.create(
             model=OPENAI_MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            timeout=30.0
+            messages=[{"role": "user", "content": prompt}]
         )
         answer = llm_response.choices[0].message.content
     except Exception as e:
         error_msg = str(e)
+        error_type = type(e).__name__
+        
+        # Log the full error for debugging
+        print(f"OpenAI API Error: {error_type}: {error_msg}")
+        
         if "timeout" in error_msg.lower():
             raise HTTPException(
                 status_code=504,
                 detail="OpenAI API request timed out. Please try again or check your network connection."
             )
-        elif "api key" in error_msg.lower() or "authentication" in error_msg.lower():
+        elif "insufficient_quota" in error_msg.lower() or "quota" in error_msg.lower() or error_type == "RateLimitError":
+            raise HTTPException(
+                status_code=429,
+                detail="OpenAI API quota exceeded. Please check your billing and add credits to your OpenAI account at https://platform.openai.com/account/billing"
+            )
+        elif "api key" in error_msg.lower() or "authentication" in error_msg.lower() or "401" in error_msg:
             raise HTTPException(
                 status_code=401,
                 detail="OpenAI API authentication failed. Please check your API key in the .env file."
             )
+        elif "proxies" in error_msg.lower():
+            raise HTTPException(
+                status_code=500,
+                detail=f"OpenAI client configuration error: {error_msg}. Try updating the openai library: pip install --upgrade openai"
+            )
         else:
             raise HTTPException(
                 status_code=500,
-                detail=f"OpenAI API error: {error_msg}. Please check your API key and network connection."
+                detail=f"OpenAI API error ({error_type}): {error_msg}. Check your API key, network connection, and openai library version."
             )
     return JSONResponse({
         'answer': answer,
