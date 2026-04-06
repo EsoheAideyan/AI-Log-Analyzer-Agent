@@ -11,8 +11,8 @@ export default function UploadPage() {
             ← Back to Home
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Upload Log Files</h1>
-          <p className="text-gray-600 mt-2">
-            Upload your SCADA/field log files for processing and analysis
+          <p className="text-gray-700 mt-2">
+            Upload your log files for processing and analysis
           </p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">

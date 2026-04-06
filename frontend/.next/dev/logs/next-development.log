@@ -1,5 +1,18 @@
-[00:00:04.872] Server  LOG      ✓ Ready in 3.4s
-[00:02:46.776] Server  LOG      ○ Compiling / ...
-[00:02:51.016] Server  WARN     ⚠ Cross origin request detected from 192.168.1.80 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
-Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-[00:02:51.079] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:03.322] Server  LOG      ✓ Ready in 2.4s
+[00:00:06.342] Server  LOG      ○ Compiling / ...
+[00:00:07.166] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:19.142] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:29.000] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:35.301] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:52.751] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:14.992] Browser LOG     File uploaded successfully: {"events_count":10,"file_id":"9163f668-382f-4d67-81d1-7c3ac1f0c6e4","message":"File uploaded and processed successfully"}
+[00:03:00.801] Server  LOG      ✓ Compiled in 40ms
+[00:03:30.473] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:38.507] Browser LOG     File uploaded successfully: {"events_count":10,"file_id":"0fcdda91-886f-43a5-89c8-060c39b9f333","message":"File uploaded and processed successfully"}
+[00:05:29.320] Server  LOG      ✓ Compiled in 112ms
+[00:05:46.590] Server  LOG      ✓ Compiled in 32ms
+[00:05:49.490] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:17.205] Server  LOG      ✓ Compiled in 35ms
+[00:15:49.737] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:23:17.791] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:31:34.573] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

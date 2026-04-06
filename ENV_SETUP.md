@@ -46,6 +46,10 @@ FAISS_META_DB=./data/metadata.db      # Default: ./data/metadata.db
 # Server Configuration
 PORT=8000                         # Default: 8000 (set by uvicorn)
 HOST=0.0.0.0                      # Default: 0.0.0.0 (set by uvicorn)
+
+# Search (optional)
+SEARCH_MAX_L2_DISTANCE=1.2        # FAISS squared L2 distance ceiling for semantic candidates
+SEARCH_SEMANTIC_POOL=2500         # How many semantic hits to consider before keyword filter (max 10000)
 ```
 
 ### Backend .env File Example
