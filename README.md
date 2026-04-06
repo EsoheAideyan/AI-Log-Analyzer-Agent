@@ -2,7 +2,7 @@
 
 An intelligent log analysis system that uses RAG (Retrieval-Augmented Generation) to search, summarize, and detect anomalies in SCADA/field logs using LLM + embeddings.
 
-## What this is (plain English)
+## What this is
 
 If you work with log files and need to **find problems quickly**, **ask questions in normal language**, or **see what happened over time**, this app helps. You upload logs through a simple web page; the system reads them, indexes them, and lets you search, chat with an AI assistant about them, and view errors and timelines on a dashboard.
 
