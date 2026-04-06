@@ -8,36 +8,74 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 ;
-function EventTable({ events, query }) {
+function EventTable({ events, query, showTitle = true }) {
     const highlightText = (text, searchTerm)=>{
-        if (!text) return 'N/A';
-        if (!searchTerm) return text;
-        // Split search term into individual words for better highlighting
-        const searchWords = searchTerm.trim().split(/\s+/).filter((word)=>word.length > 0);
-        if (searchWords.length === 0) return text;
-        // Create a regex that matches any of the search words
-        const escapedWords = searchWords.map((word)=>word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        const regex = new RegExp(`(${escapedWords.join('|')})`, 'gi');
-        // Split text by all search words
-        const parts = text.split(regex);
-        return parts.map((part, i)=>{
-            // Check if this part matches any search word (case-insensitive)
-            const matches = searchWords.some((word)=>part.toLowerCase() === word.toLowerCase());
-            return matches ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mark", {
-                className: "bg-yellow-200",
-                children: part
-            }, i, false, {
+        if (!text) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "text-gray-900",
+            children: "N/A"
+        }, void 0, false, {
+            fileName: "[project]/components/EventTable.tsx",
+            lineNumber: 24,
+            columnNumber: 27
+        }, this);
+        const term = typeof searchTerm === 'string' ? searchTerm.trim() : '';
+        if (!term) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "text-gray-900",
+            children: text
+        }, void 0, false, {
+            fileName: "[project]/components/EventTable.tsx",
+            lineNumber: 26,
+            columnNumber: 27
+        }, this);
+        // Split search term into words (ignore empty)
+        const searchWords = term.split(/\s+/).filter((word)=>word.length > 0);
+        if (searchWords.length === 0) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "text-gray-900",
+            children: text
+        }, void 0, false, {
+            fileName: "[project]/components/EventTable.tsx",
+            lineNumber: 30,
+            columnNumber: 46
+        }, this);
+        try {
+            // Escape regex special chars and match whole words or substrings
+            const escapedWords = searchWords.map((word)=>word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const regex = new RegExp(`(${escapedWords.join('|')})`, 'gi');
+            const parts = text.split(regex);
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                className: "text-gray-900",
+                children: parts.map((part, i)=>{
+                    const matches = searchWords.some((word)=>part.length > 0 && word.length > 0 && part.toLowerCase() === word.toLowerCase());
+                    return matches ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mark", {
+                        className: "bg-amber-300 text-gray-900 font-semibold px-0.5 rounded",
+                        children: part
+                    }, i, false, {
+                        fileName: "[project]/components/EventTable.tsx",
+                        lineNumber: 48,
+                        columnNumber: 29
+                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: part
+                    }, i, false, {
+                        fileName: "[project]/components/EventTable.tsx",
+                        lineNumber: 52,
+                        columnNumber: 29
+                    }, this);
+                })
+            }, void 0, false, {
                 fileName: "[project]/components/EventTable.tsx",
-                lineNumber: 46,
-                columnNumber: 17
-            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                children: part
-            }, i, false, {
-                fileName: "[project]/components/EventTable.tsx",
-                lineNumber: 48,
+                lineNumber: 41,
                 columnNumber: 17
             }, this);
-        });
+        } catch  {
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                className: "text-gray-900",
+                children: text
+            }, void 0, false, {
+                fileName: "[project]/components/EventTable.tsx",
+                lineNumber: 58,
+                columnNumber: 20
+            }, this);
+        }
     };
     const getLevelColor = (level)=>{
         switch(level?.toUpperCase()){
@@ -64,7 +102,7 @@ function EventTable({ events, query }) {
                     children: "Event Table"
                 }, void 0, false, {
                     fileName: "[project]/components/EventTable.tsx",
-                    lineNumber: 73,
+                    lineNumber: 82,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -72,21 +110,21 @@ function EventTable({ events, query }) {
                     children: "No events to display"
                 }, void 0, false, {
                     fileName: "[project]/components/EventTable.tsx",
-                    lineNumber: 74,
+                    lineNumber: 83,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/EventTable.tsx",
-            lineNumber: 72,
+            lineNumber: 81,
             columnNumber: 13
         }, this);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "p-4",
+        className: showTitle ? "p-4" : "p-0",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                className: "text-2xl font-bold mb-4",
+            showTitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                className: "text-2xl font-bold mb-4 text-gray-900",
                 children: [
                     "Event Table (",
                     events.length,
@@ -94,162 +132,162 @@ function EventTable({ events, query }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/EventTable.tsx",
-                lineNumber: 81,
-                columnNumber: 13
+                lineNumber: 91,
+                columnNumber: 17
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "overflow-x-auto",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                    className: "min-w-full border-collapse border border-gray-300",
+                    className: "min-w-full border-collapse border-2 border-gray-400",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                className: "bg-gray-100",
+                                className: "bg-gray-200",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Level"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 86,
+                                        lineNumber: 97,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Timestamp"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 87,
+                                        lineNumber: 98,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Source"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 88,
+                                        lineNumber: 99,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Message"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 89,
+                                        lineNumber: 100,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Asset"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 101,
                                         columnNumber: 29
                                     }, this),
                                     events[0]?.distance !== undefined && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "border border-gray-300 px-4 py-2 text-left",
+                                        className: "border-2 border-gray-400 px-4 py-3 text-left font-bold text-gray-900",
                                         children: "Distance"
                                     }, void 0, false, {
                                         fileName: "[project]/components/EventTable.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 103,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/EventTable.tsx",
-                                lineNumber: 85,
+                                lineNumber: 96,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/EventTable.tsx",
-                            lineNumber: 84,
+                            lineNumber: 95,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
                             children: events.map((event, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                    className: "hover:bg-gray-50",
+                                    className: "hover:bg-gray-100 bg-white",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2",
+                                            className: "border-2 border-gray-300 px-4 py-3",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: `px-2 py-1 rounded text-xs font-semibold ${getLevelColor(event.level || 'INFO')}`,
                                                 children: event.level || 'INFO'
                                             }, void 0, false, {
                                                 fileName: "[project]/components/EventTable.tsx",
-                                                lineNumber: 100,
+                                                lineNumber: 111,
                                                 columnNumber: 37
                                             }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/EventTable.tsx",
-                                            lineNumber: 99,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2 text-sm",
-                                            children: event.ts || 'N/A'
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/EventTable.tsx",
-                                            lineNumber: 104,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2 text-sm",
-                                            children: event.source || 'N/A'
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/EventTable.tsx",
-                                            lineNumber: 107,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2",
-                                            children: highlightText(event.message || event.text, query)
                                         }, void 0, false, {
                                             fileName: "[project]/components/EventTable.tsx",
                                             lineNumber: 110,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2 text-sm",
+                                            className: "border-2 border-gray-300 px-4 py-3 text-base text-gray-900 font-medium",
+                                            children: event.ts || 'N/A'
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/EventTable.tsx",
+                                            lineNumber: 115,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                            className: "border-2 border-gray-300 px-4 py-3 text-base text-gray-900 font-medium",
+                                            children: event.source || 'N/A'
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/EventTable.tsx",
+                                            lineNumber: 118,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                            className: "border-2 border-gray-300 px-4 py-3 text-base text-gray-900",
+                                            children: highlightText(event.message || event.text, query)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/EventTable.tsx",
+                                            lineNumber: 121,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                            className: "border-2 border-gray-300 px-4 py-3 text-base text-gray-900 font-medium",
                                             children: event.asset || 'N/A'
                                         }, void 0, false, {
                                             fileName: "[project]/components/EventTable.tsx",
-                                            lineNumber: 113,
+                                            lineNumber: 124,
                                             columnNumber: 33
                                         }, this),
                                         event.distance !== undefined && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "border border-gray-300 px-4 py-2 text-sm",
+                                            className: "border-2 border-gray-300 px-4 py-3 text-base text-gray-900 font-medium",
                                             children: event.distance.toFixed(4)
                                         }, void 0, false, {
                                             fileName: "[project]/components/EventTable.tsx",
-                                            lineNumber: 117,
+                                            lineNumber: 128,
                                             columnNumber: 37
                                         }, this)
                                     ]
                                 }, event.id || `event-${idx}`, true, {
                                     fileName: "[project]/components/EventTable.tsx",
-                                    lineNumber: 98,
+                                    lineNumber: 109,
                                     columnNumber: 29
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/components/EventTable.tsx",
-                            lineNumber: 96,
+                            lineNumber: 107,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/EventTable.tsx",
-                    lineNumber: 83,
+                    lineNumber: 94,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/EventTable.tsx",
-                lineNumber: 82,
+                lineNumber: 93,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/EventTable.tsx",
-        lineNumber: 80,
+        lineNumber: 89,
         columnNumber: 9
     }, this);
 }
@@ -260,204 +298,11 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/app/search/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/app/search/page.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "default",
-    ()=>SearchPage
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$EventTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/EventTable.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
-;
-var _s = __turbopack_context__.k.signature();
-"use client";
-;
-;
-;
-function SearchPage() {
-    _s();
-    const [query, setQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    const [results, setResults] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    const handleSearch = async (e)=>{
-        e.preventDefault();
-        if (!query.trim()) return;
-        setLoading(true);
-        setError("");
-        try {
-            const apiUrl = ("TURBOPACK compile-time value", "http://localhost:8000") || "http://localhost:8000";
-            const response = await fetch(`${apiUrl}/api/search`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    query,
-                    top_k: 10
-                })
-            });
-            if (!response.ok) {
-                throw new Error("Search failed");
-            }
-            const data = await response.json();
-            setResults(data.results || []);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
-            setResults([]);
-        } finally{
-            setLoading(false);
-        }
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen bg-gray-50",
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "container mx-auto px-4 py-8",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-6",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            href: "/",
-                            className: "text-blue-600 hover:text-blue-800 mb-4 inline-block",
-                            children: "← Back to Home"
-                        }, void 0, false, {
-                            fileName: "[project]/app/search/page.tsx",
-                            lineNumber: 48,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                            className: "text-3xl font-bold text-gray-900",
-                            children: "Semantic Search"
-                        }, void 0, false, {
-                            fileName: "[project]/app/search/page.tsx",
-                            lineNumber: 51,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-gray-600 mt-2",
-                            children: "Search your logs using natural language queries"
-                        }, void 0, false, {
-                            fileName: "[project]/app/search/page.tsx",
-                            lineNumber: 52,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/app/search/page.tsx",
-                    lineNumber: 47,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-lg shadow p-6 mb-6",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                        onSubmit: handleSearch,
-                        className: "flex gap-4",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                type: "text",
-                                value: query,
-                                onChange: (e)=>setQuery(e.target.value),
-                                placeholder: "Search for errors, connection issues, specific events...",
-                                className: "flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                disabled: loading
-                            }, void 0, false, {
-                                fileName: "[project]/app/search/page.tsx",
-                                lineNumber: 59,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "submit",
-                                disabled: loading || !query.trim(),
-                                className: "px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed",
-                                children: loading ? "Searching..." : "Search"
-                            }, void 0, false, {
-                                fileName: "[project]/app/search/page.tsx",
-                                lineNumber: 67,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/app/search/page.tsx",
-                        lineNumber: 58,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/app/search/page.tsx",
-                    lineNumber: 57,
-                    columnNumber: 9
-                }, this),
-                error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6",
-                    children: [
-                        "Error: ",
-                        error
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/app/search/page.tsx",
-                    lineNumber: 78,
-                    columnNumber: 11
-                }, this),
-                results.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-lg shadow p-6",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-xl font-semibold mb-4",
-                            children: [
-                                "Search Results (",
-                                results.length,
-                                ")"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/app/search/page.tsx",
-                            lineNumber: 85,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$EventTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            events: results,
-                            query: query
-                        }, void 0, false, {
-                            fileName: "[project]/app/search/page.tsx",
-                            lineNumber: 88,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/app/search/page.tsx",
-                    lineNumber: 84,
-                    columnNumber: 11
-                }, this),
-                !loading && results.length === 0 && query && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded",
-                    children: "No results found. Try a different search query."
-                }, void 0, false, {
-                    fileName: "[project]/app/search/page.tsx",
-                    lineNumber: 93,
-                    columnNumber: 11
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/app/search/page.tsx",
-            lineNumber: 46,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/app/search/page.tsx",
-        lineNumber: 45,
-        columnNumber: 5
-    }, this);
-}
-_s(SearchPage, "OOrB4TxszxszBYcYkcrpevmKUgg=");
-_c = SearchPage;
-var _c;
-__turbopack_context__.k.register(_c, "SearchPage");
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
-}
+const e = new Error("Could not parse module '[project]/app/search/page.tsx'\n\nExpected ',', got '...'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/node_modules/next/dist/compiled/react/cjs/react-jsx-dev-runtime.development.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 "use strict";

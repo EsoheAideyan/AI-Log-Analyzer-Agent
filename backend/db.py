@@ -60,6 +60,13 @@ def insert_events_bulk(file_id, events):
     conn.commit()
     conn.close()
 
+def file_exists(file_id):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute('SELECT id FROM files WHERE id = ?', (file_id,))
+    ok = cur.fetchone() is not None
+    conn.close()
+    return ok
 
 def get_file_status(file_id):
     conn = sqlite3.connect(DB_PATH)

@@ -10,8 +10,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$dropzone$2f$dist$2f$es$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/react-dropzone/dist/es/index.js [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
+;
 ;
 ;
 function FileDropzone() {
@@ -19,6 +21,7 @@ function FileDropzone() {
     const [files, setFiles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [uploading, setUploading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [uploadStatus, setUploadStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [lastFileId, setLastFileId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const onDrop = async (acceptedFiles)=>{
         setFiles(acceptedFiles);
         await handleUpload(acceptedFiles);
@@ -51,7 +54,10 @@ function FileDropzone() {
                     throw new Error(`Failed to upload ${file.name}`);
                 }
                 const data = await response.json();
-                setUploadStatus(`✓ ${file.name} uploaded successfully (${data.events_count} events)`);
+                if (data.file_id) {
+                    setLastFileId(data.file_id);
+                }
+                setUploadStatus(`✓ ${file.name} uploaded successfully`);
                 console.log('File uploaded successfully:', data);
             } catch (error) {
                 setUploadStatus(`✗ Error uploading ${file.name}: ${error}`);
@@ -64,11 +70,11 @@ function FileDropzone() {
         className: "p-4",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                className: "text-2xl font-bold mb-4",
+                className: "text-2xl font-bold mb-4 text-gray-900",
                 children: "File Dropzone"
             }, void 0, false, {
                 fileName: "[project]/components/FileDropzone.tsx",
-                lineNumber: 56,
+                lineNumber: 61,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -79,47 +85,118 @@ function FileDropzone() {
                         ...getInputProps()
                     }, void 0, false, {
                         fileName: "[project]/components/FileDropzone.tsx",
-                        lineNumber: 63,
+                        lineNumber: 68,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-gray-600",
+                        className: `text-base font-medium ${isDragActive ? 'text-blue-700' : 'text-gray-700'}`,
                         children: isDragActive ? 'Drop the files here...' : 'Drag and drop log files here, or click to select files'
                     }, void 0, false, {
                         fileName: "[project]/components/FileDropzone.tsx",
-                        lineNumber: 64,
+                        lineNumber: 69,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/FileDropzone.tsx",
-                lineNumber: 57,
+                lineNumber: 62,
                 columnNumber: 13
             }, this),
             uploadStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: `mt-4 p-2 rounded ${uploadStatus.startsWith('✓') ? 'bg-green-100' : 'bg-red-100'}`,
-                children: uploadStatus
-            }, void 0, false, {
+                className: `mt-4 p-4 rounded-lg border-2 ${uploadStatus.startsWith('✓') ? 'bg-green-50 border-green-300 text-green-800' : 'bg-red-50 border-red-300 text-red-800'}`,
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "font-semibold text-base mb-3",
+                        children: uploadStatus
+                    }, void 0, false, {
+                        fileName: "[project]/components/FileDropzone.tsx",
+                        lineNumber: 83,
+                        columnNumber: 21
+                    }, this),
+                    uploadStatus.startsWith('✓') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mt-4 pt-4 border-t border-green-300",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm font-medium text-green-900 mb-3",
+                                children: "What would you like to do next?"
+                            }, void 0, false, {
+                                fileName: "[project]/components/FileDropzone.tsx",
+                                lineNumber: 86,
+                                columnNumber: 29
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-wrap gap-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: lastFileId ? `/search?file_id=${encodeURIComponent(lastFileId)}` : '/search',
+                                        className: "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium",
+                                        children: "🔍 Search Logs"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/FileDropzone.tsx",
+                                        lineNumber: 90,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: lastFileId ? `/chat?file_id=${encodeURIComponent(lastFileId)}` : '/chat',
+                                        className: "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium",
+                                        children: "💬 Ask Questions"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/FileDropzone.tsx",
+                                        lineNumber: 96,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/dashboard",
+                                        className: "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium",
+                                        children: "📊 View Dashboard"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/FileDropzone.tsx",
+                                        lineNumber: 102,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/",
+                                        className: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium",
+                                        children: "🏠 Back to Home"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/FileDropzone.tsx",
+                                        lineNumber: 108,
+                                        columnNumber: 33
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/FileDropzone.tsx",
+                                lineNumber: 89,
+                                columnNumber: 29
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/FileDropzone.tsx",
+                        lineNumber: 85,
+                        columnNumber: 25
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "[project]/components/FileDropzone.tsx",
-                lineNumber: 71,
+                lineNumber: 78,
                 columnNumber: 17
             }, this),
             uploading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "mt-2 text-blue-600",
+                className: "mt-2 text-blue-700 font-medium",
                 children: "Processing..."
             }, void 0, false, {
                 fileName: "[project]/components/FileDropzone.tsx",
-                lineNumber: 75,
-                columnNumber: 27
+                lineNumber: 120,
+                columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/FileDropzone.tsx",
-        lineNumber: 55,
+        lineNumber: 60,
         columnNumber: 9
     }, this);
 }
-_s(FileDropzone, "dwU40XKLdxNBJON0Lv7t6eHCPow=", false, function() {
+_s(FileDropzone, "Ih1kDDhuWea97R0+OSRZnycSwUw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$dropzone$2f$dist$2f$es$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["useDropzone"]
     ];
@@ -172,8 +249,8 @@ function UploadPage() {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-gray-600 mt-2",
-                            children: "Upload your SCADA/field log files for processing and analysis"
+                            className: "text-gray-700 mt-2",
+                            children: "Upload your log files for processing and analysis"
                         }, void 0, false, {
                             fileName: "[project]/app/upload/page.tsx",
                             lineNumber: 14,

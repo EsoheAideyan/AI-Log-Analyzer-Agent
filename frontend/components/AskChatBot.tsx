@@ -1,15 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import PaginationControls from '@/components/PaginationControls';
+
+const EVIDENCE_PAGE_SIZE = 10;
 
 export default function AskChatBot() {
     const [query, setQuery] = useState('');
     const [response, setResponse] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>('');
+    const [evidencePage, setEvidencePage] = useState(1);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        setEvidencePage(1);
+    }, [response]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        const file_id = searchParams.get('file_id');
         if (!query.trim()) return;
         
         setLoading(true);
@@ -27,7 +39,7 @@ export default function AskChatBot() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query }),
+                body: JSON.stringify({ query, ...(file_id ? { file_id } : {}) }),
                 signal: controller.signal,
             });
             
@@ -56,9 +68,22 @@ export default function AskChatBot() {
         }
     }
 
+    const scopedFileId = searchParams.get('file_id');
+    const evidenceList: any[] = response?.evidence ?? [];
+    const evidencePaged = evidenceList.slice(
+        (evidencePage - 1) * EVIDENCE_PAGE_SIZE,
+        evidencePage * EVIDENCE_PAGE_SIZE
+    );
+
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Ask Chat Bot</h1>
+        <div className="p-4 text-gray-900">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900">Ask Chat Bot</h1>
+            {scopedFileId && (
+                <p className="mb-4 text-sm text-gray-900">
+                    Answering using log lines from this upload only.{' '}
+                    <Link href="/chat" className="text-blue-600 hover:underline">Ask across all logs</Link>
+                </p>
+            )}
             <form onSubmit={handleSubmit} className="mb-4">
                 <div className="flex gap-2">
                     <input
@@ -66,7 +91,7 @@ export default function AskChatBot() {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Ask a question about your logs..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         disabled={loading}
                     />
                     <button
@@ -87,24 +112,30 @@ export default function AskChatBot() {
             
             {response && (
                 <div className="space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                        <h3 className="font-semibold mb-2">Answer:</h3>
-                        <p className="whitespace-pre-wrap">{response.answer}</p>
+                    <div className={`p-4 rounded-lg border ${response.no_grounding_match ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
+                        <h3 className="font-semibold mb-2 text-gray-900">Answer:</h3>
+                        <p className="whitespace-pre-wrap text-gray-900">{response.answer}</p>
                     </div>
                     
-                    {response.evidence && response.evidence.length > 0 && (
-                        <div className="p-4 bg-blue-50 rounded-lg">
-                            <h3 className="font-semibold mb-2">Evidence ({response.evidence.length} results):</h3>
+                    {evidenceList.length > 0 && (
+                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <h3 className="font-semibold mb-2 text-gray-900">Evidence ({evidenceList.length} results):</h3>
                             <div className="space-y-2">
-                                {response.evidence.map((item: any, idx: number) => (
-                                    <div key={idx} className="p-2 bg-white rounded border border-blue-200">
-                                        <div className="text-sm text-gray-600">
+                                {evidencePaged.map((item: any, idx: number) => (
+                                    <div key={(evidencePage - 1) * EVIDENCE_PAGE_SIZE + idx} className="p-2 bg-white rounded border border-blue-200">
+                                        <div className="text-sm text-gray-900">
                                             {item.level} | {item.source} | {item.ts}
                                         </div>
-                                        <div className="mt-1">{item.text}</div>
+                                        <div className="mt-1 text-gray-900">{item.text}</div>
                                     </div>
                                 ))}
                             </div>
+                            <PaginationControls
+                                page={evidencePage}
+                                pageSize={EVIDENCE_PAGE_SIZE}
+                                totalCount={evidenceList.length}
+                                onPageChange={setEvidencePage}
+                            />
                         </div>
                     )}
                 </div>

@@ -3,12 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import EventTable from "@/components/EventTable";
+import PaginationControls from "@/components/PaginationControls";
+
+const PAGE_SIZE = 10;
 
 export default function DashboardPage() {
   const [anomalies, setAnomalies] = useState<any[]>([]);
   const [timeline, setTimeline] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [anomalyPage, setAnomalyPage] = useState(1);
+  const [timelinePage, setTimelinePage] = useState(1);
 
   useEffect(() => {
     fetchData();
@@ -36,6 +41,8 @@ export default function DashboardPage() {
 
       setAnomalies(anomaliesData.anomalies || []);
       setTimeline(timelineData.events || []);
+      setAnomalyPage(1);
+      setTimelinePage(1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -91,9 +98,17 @@ export default function DashboardPage() {
 
             {/* Anomalies Section */}
             <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <h2 className="text-2xl font-semibold mb-4">Detected Anomalies</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Detected Anomalies ({anomalies.length})</h2>
               {anomalies.length > 0 ? (
-                <EventTable events={anomalies} />
+                <>
+                  <EventTable events={anomalies.slice((anomalyPage - 1) * PAGE_SIZE, anomalyPage * PAGE_SIZE)} showTitle={false} />
+                  <PaginationControls
+                    page={anomalyPage}
+                    pageSize={PAGE_SIZE}
+                    totalCount={anomalies.length}
+                    onPageChange={setAnomalyPage}
+                  />
+                </>
               ) : (
                 <p className="text-gray-500">No anomalies detected yet. Upload some log files to get started.</p>
               )}
@@ -101,33 +116,43 @@ export default function DashboardPage() {
 
             {/* Timeline Section */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-semibold mb-4">Recent Timeline</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Recent Timeline ({timeline.length})</h2>
               {timeline.length > 0 ? (
-                <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {timeline.slice(0, 50).map((event, idx) => (
-                    <div
-                      key={idx}
-                      className="border-l-4 border-blue-500 pl-4 py-2 hover:bg-gray-50"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                            event.level === "ERROR" || event.level === "CRITICAL"
-                              ? "bg-red-100 text-red-800"
-                              : event.level === "WARN"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-blue-100 text-blue-800"
-                          }`}>
-                            {event.level || "INFO"}
-                          </span>
-                          <span className="ml-2 text-sm text-gray-600">{event.source || "N/A"}</span>
+                <>
+                  <div className="space-y-2">
+                    {timeline
+                      .slice((timelinePage - 1) * PAGE_SIZE, timelinePage * PAGE_SIZE)
+                      .map((event, idx) => (
+                        <div
+                          key={(timelinePage - 1) * PAGE_SIZE + idx}
+                          className="border-l-4 border-blue-500 pl-4 py-2 hover:bg-gray-50"
+                        >
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                event.level === "ERROR" || event.level === "CRITICAL"
+                                  ? "bg-red-100 text-red-800"
+                                  : event.level === "WARN"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-blue-100 text-blue-800"
+                              }`}>
+                                {event.level || "INFO"}
+                              </span>
+                              <span className="ml-2 text-sm text-gray-600">{event.source || "N/A"}</span>
+                            </div>
+                            <div className="text-xs text-gray-500">{event.ts || "N/A"}</div>
+                          </div>
+                          <div className="mt-1 text-sm text-gray-700">{event.message || event.text || "N/A"}</div>
                         </div>
-                        <div className="text-xs text-gray-500">{event.ts || "N/A"}</div>
-                      </div>
-                      <div className="mt-1 text-sm text-gray-700">{event.message || event.text || "N/A"}</div>
-                    </div>
-                  ))}
-                </div>
+                      ))}
+                  </div>
+                  <PaginationControls
+                    page={timelinePage}
+                    pageSize={PAGE_SIZE}
+                    totalCount={timeline.length}
+                    onPageChange={setTimelinePage}
+                  />
+                </>
               ) : (
                 <p className="text-gray-500">No timeline data available. Upload some log files to get started.</p>
               )}
