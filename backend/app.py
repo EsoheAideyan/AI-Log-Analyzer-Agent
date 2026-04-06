@@ -6,12 +6,17 @@ import uuid
 from dotenv import load_dotenv
 import json
 import sqlite3
-from fastapi import FastAPI, Request, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from parsers import parse_log_file
-from db import init_db, insert_file_record, mark_file_parsed, insert_events_bulk, get_file_status, get_event, get_log_events
-from embeddings import EmbeddingIndex
+from db import init_db, insert_file_record, mark_file_parsed, insert_events_bulk, get_file_status, get_event, get_log_events, file_exists
+from embeddings import (
+    EmbeddingIndex,
+    DEFAULT_MAX_L2_DISTANCE,
+    DEFAULT_RELEVANCE_MARGIN,
+    USE_DISTANCE_FILTER,
+)
 from openai import OpenAI
 
 # Load environment variables from .env file
@@ -37,6 +42,40 @@ app.add_middleware(
 init_db()
 index = EmbeddingIndex(index_path='./data/faiss.index', meta_db='./data/metadata.db')
 
+# Search: pull this many semantic candidates, then keep only rows whose message text contains query terms.
+SEARCH_SEMANTIC_POOL = min(
+    int(os.environ.get('SEARCH_SEMANTIC_POOL', '2500')),
+    10000,
+)
+
+
+def _search_terms(query: str) -> list[str]:
+    """Lowercased tokens (length >= 2) used for substring match in log lines."""
+    return [t.lower() for t in query.split() if len(t) >= 2]
+
+
+def _keyword_match_score(text: str, terms: list[str]) -> int:
+    if not text or not terms:
+        return 0
+    blob = text.lower()
+    return sum(1 for w in terms if w in blob)
+
+
+def _filter_sort_keyword_hits(pool: list, query: str) -> list:
+    """Keep only rows whose text contains at least one query term; best matches first."""
+    terms = _search_terms(query)
+    if not terms:
+        return pool
+    scored = []
+    for r in pool:
+        text = r.get('text') or ''
+        s = _keyword_match_score(text, terms)
+        if s > 0:
+            scored.append((r, s))
+    scored.sort(key=lambda x: (-x[1], x[0].get('distance', 0)))
+    return [r for r, _ in scored]
+
+
 @app.get("/api/debug/env")
 async def debug_env():
     return JSONResponse({
@@ -55,21 +94,17 @@ async def upload(file: UploadFile = File(...)):
 
     with open(file_path, "wb") as f:
         f.write(await file.read())
-    
-    #register file in meta db
+
     insert_file_record(file_id, file.filename, file_path)
 
-    #parse immediately
     events = parse_log_file(file_path)
     if not events:
         mark_file_parsed(file_id, False)
         raise HTTPException(status_code=500, detail="Failed to parse log file")
 
-    #insert events
     insert_events_bulk(file_id, events)
     mark_file_parsed(file_id, True)
 
-    #index text chunks into FAISS (batch for efficiency)
     chunks = []
     for event in events:
         chunks.append({
@@ -82,14 +117,14 @@ async def upload(file: UploadFile = File(...)):
                 'source': event.get('source')
             }
         })
-    
+
     if chunks:
         index.add_chunks(chunks)
-    
+
     return JSONResponse(content={
         "message": "File uploaded and processed successfully",
         "file_id": file_id,
-        "events_count": len(events)
+        "events_count": len(events),
     })
 
 
@@ -103,21 +138,92 @@ async def file_status(file_id: str):
 #POST /api/search
 @app.post("/api/search")
 async def search(payload: dict):
+    file_id = payload.get('file_id')
+    
     query = payload.get('query')
-    top_k = payload.get('top_k', 6)
+    # Max rows to return after relevance filter (not "always N results")
+    max_matches = min(int(payload.get('max_matches') or payload.get('top_k') or 100), 500)
+    max_l2 = payload.get('max_l2_distance')
+    if max_l2 is not None:
+        max_l2 = float(max_l2)
+    page = payload.get('page', 1)
+    page_size = payload.get('page_size', 10)
+    
     if not query:
         raise HTTPException(status_code=400, detail="Query is required")
-    results = index.search(query, top_k=top_k)
-    return JSONResponse({'query': query, 'results': results})
+
+    if file_id and not file_exists(file_id):
+        raise HTTPException(status_code=404, detail="file_id not found")
+    
+    # Calculate pagination
+    if page < 1:
+        page = 1
+    
+    ntotal = getattr(index.index, 'ntotal', 0) or 0
+    if ntotal == 0:
+        return JSONResponse({
+            'query': query,
+            'results': [],
+            'total_count': 0,
+            'page': page,
+            'page_size': page_size,
+            'total_pages': 0,
+            'max_l2_distance_effective': max_l2 if max_l2 is not None else (DEFAULT_MAX_L2_DISTANCE if USE_DISTANCE_FILTER else None),
+        })
+
+    rel = payload.get('relevance_margin')
+    relevance_margin = float(rel) if rel is not None else DEFAULT_RELEVANCE_MARGIN
+
+    # Wider semantic pool so keyword filter still finds enough lines that literally match the query.
+    pool_size = min(SEARCH_SEMANTIC_POOL, ntotal) if ntotal else 0
+    keyword_only = payload.get('keyword_only', True)
+    if isinstance(keyword_only, str):
+        keyword_only = keyword_only.lower() not in ('0', 'false', 'no')
+
+    pool = index.search(
+        query,
+        max_results=max(pool_size, 1),
+        file_id=file_id,
+        max_l2_distance=max_l2,
+        relevance_margin=relevance_margin,
+    )
+
+    if keyword_only:
+        all_results = _filter_sort_keyword_hits(pool, query)
+    else:
+        all_results = pool
+
+    total_found = len(all_results)
+    
+    # Apply pagination
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    paginated_results = all_results[start_idx:end_idx]
+    
+    total_pages = (total_found + page_size - 1) // page_size if total_found > 0 else 0
+    
+    return JSONResponse({
+        'query': query,
+        'results': paginated_results,
+        'total_count': total_found,
+        'page': page,
+        'page_size': page_size,
+        'total_pages': total_pages,
+        'max_l2_distance_effective': max_l2 if max_l2 is not None else (DEFAULT_MAX_L2_DISTANCE if USE_DISTANCE_FILTER else None),
+    })
 
 #POST /api/ask
 @app.post("/api/ask")
 async def ask(payload: dict):
+    file_id = payload.get('file_id')
     query = payload.get('query')
     top_k = payload.get('top_k', 6)
     if not query:
         raise HTTPException(status_code=400, detail="Query is required")
-    results = index.search(query, top_k=6)
+    if file_id and not file_exists(file_id):
+        raise HTTPException(status_code=404, detail="file_id not found")
+    
+    results = index.search(query, max_results=int(top_k), file_id=file_id, max_l2_distance=None)
 
     # construct prompt (caller can swap in preferred LLM provider)
     context = "\n\n".join([h['text'] for h in results])
