@@ -1,14 +1,14 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import EventTable from "@/components/EventTable";
+import EventTable, { type Event } from "@/components/EventTable";
 import PaginationControls from "@/components/PaginationControls";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 function SearchPageInner() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [hasSearched, setHasSearched] = useState(false);

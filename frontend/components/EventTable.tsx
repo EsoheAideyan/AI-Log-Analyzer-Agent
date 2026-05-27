@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Event {
+export interface Event {
     id: string;
     file_id?: string;
     line_no?: number;

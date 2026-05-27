@@ -4,13 +4,11 @@ import Link from "next/link";
 
 
 export default function FileDropzone() {
-    const [files, setFiles] = useState<File[]>([]);
     const [uploading, setUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [lastFileId, setLastFileId] = useState<string | null>(null);
 
     const onDrop = async (acceptedFiles: File[]) => {
-        setFiles(acceptedFiles);
         await handleUpload(acceptedFiles);
     };
 

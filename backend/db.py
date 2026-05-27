@@ -76,7 +76,13 @@ def get_file_status(file_id):
     conn.close()
     if not row:
         return {'file_id': file_id, 'found': False}
-    return {'file_id': row[0], 'filename': row[1], 'uploaded_at': row[2], 'parsed': bool(row[3])}
+    return {
+        'file_id': row[0],
+        'filename': row[1],
+        'uploaded_at': row[2],
+        'parsed': bool(row[3]),
+        'found': True,
+    }
 
 def get_log_events(file_id):
     conn = sqlite3.connect(DB_PATH)

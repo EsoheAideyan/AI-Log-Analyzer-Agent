@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import EventTable from "@/components/EventTable";
+import EventTable, { type Event } from "@/components/EventTable";
 import PaginationControls from "@/components/PaginationControls";
 
 const PAGE_SIZE = 10;
 
 export default function DashboardPage() {
-  const [anomalies, setAnomalies] = useState<any[]>([]);
-  const [timeline, setTimeline] = useState<any[]>([]);
+  const [anomalies, setAnomalies] = useState<Event[]>([]);
+  const [timeline, setTimeline] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const [anomalyPage, setAnomalyPage] = useState(1);

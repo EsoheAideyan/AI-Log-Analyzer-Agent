@@ -1,6 +1,6 @@
 # AI Log Analyzer Agent
 
-An intelligent log analysis system that uses RAG (Retrieval-Augmented Generation) to search, summarize, and detect anomalies in SCADA/field logs using LLM + embeddings.
+A full-stack **RAG (Retrieval-Augmented Generation)** app for SCADA and field-operation logs: upload logs, search with embeddings + keyword filtering, ask grounded questions via OpenAI, and review errors on a dashboard.
 
 ## What this is (plain English)
 
@@ -19,15 +19,58 @@ If you work with log files and need to **find problems quickly**, **ask question
 
 If something fails, see [Troubleshooting](#troubleshooting). For every setting and env variable, see [ENV_SETUP.md](./ENV_SETUP.md).
 
+### Demo walkthrough (~2 minutes)
+
+Use the included sample file `samples/scada_system.log`:
+
+1. **Upload** — Drag `samples/scada_system.log` onto the Upload page; confirm the success message with an event count.
+2. **Search** — Search for `timeout` or `error`; results should include NetworkManager connection failures.
+3. **Ask** — Open Chat and ask: *"What connection errors occurred and which devices were affected?"* (requires `OPENAI_API_KEY` in `backend/.env`).
+4. **Dashboard** — Confirm error/warning counts and the chronological timeline.
+
+For a portfolio README, add screenshots to `docs/screenshots/` (home, upload success, search results, chat answer, dashboard) and link them here.
+
 ---
 
 ## Features
 
-- **Upload Log Files** - Drag and drop log files for processing
-- **Search** - Find relevant log lines using embeddings; by default, results are filtered to lines that **contain your query words** (words 2+ characters), then ranked for relevance
-- **Ask Questions** - Get AI-powered answers about your logs (requires OpenAI API key)
-- **Anomaly Detection** - Automatically surface errors, critical events, and warnings
-- **Timeline Visualization** - View events chronologically
+- **Upload Log Files** — Drag and drop `.log`, `.txt`, or `.json` files for parsing and indexing
+- **Search** — FAISS semantic retrieval with optional keyword filtering (default: lines must contain your query terms, ranked by relevance)
+- **Ask Questions (RAG)** — GPT answers grounded in retrieved log excerpts (requires OpenAI API key)
+- **Error & Warning Dashboard** — Surfaces `ERROR`, `CRITICAL`, and `WARN` events from parsed logs (rule-based, not ML anomaly scoring)
+- **Event Timeline** — Chronological list of parsed events (paginated in the UI)
+- **Basic Summarize API** — Event/error counts per file (`POST /api/summarize`); LLM summarization not implemented yet
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph ingest [Ingest]
+    Upload[Upload .log / .txt]
+    Parse[Parse lines]
+    SQLite[(SQLite events)]
+    Embed[Sentence-Transformers]
+    FAISS[(FAISS index)]
+  end
+  subgraph query [Query]
+    Search[Search API]
+    Ask[Ask API]
+    GPT[OpenAI GPT]
+  end
+  Upload --> Parse --> SQLite
+  Parse --> Embed --> FAISS
+  Search --> FAISS
+  Search --> Keyword[Keyword filter]
+  Ask --> FAISS
+  Ask --> GPT
+  SQLite --> Dashboard[Dashboard / Timeline]
+```
+
+**Design notes (good interview talking points):**
+
+- Each log line is embedded with `all-MiniLM-L6-v2` and stored in a local FAISS `IndexFlatL2` index.
+- Search pulls a wide semantic candidate pool, then (by default) keeps only lines whose text contains query terms ≥2 characters.
+- `/api/ask` retrieves top-k neighbors, builds a prompt from those excerpts, and calls OpenAI — classic RAG, with evidence returned to the UI.
 
 ## Tech Stack
 
@@ -135,17 +178,16 @@ Point `NEXT_PUBLIC_API_URL` at your deployed API URL. Serve the FastAPI app sepa
 ```
 ai-log-agent/
 ├── backend/
-│   ├── app.py              # FastAPI main application
-│   ├── db.py               # Database operations
-│   ├── embeddings.py       # FAISS vector index management
-│   ├── parsers.py          # Log file parsing
-│   ├── requirements.txt    # Python dependencies
-│   └── .env                # Environment variables (create this; not committed)
-├── frontend/
-│   ├── app/                # Next.js app directory (routes)
-│   ├── components/         # React components
-│   ├── package.json        # Node dependencies
-│   └── .env.local          # NEXT_PUBLIC_API_URL (create this; not committed)
+│   ├── app.py              # FastAPI routes
+│   ├── db.py               # SQLite operations
+│   ├── embeddings.py       # FAISS + Sentence-Transformers
+│   ├── keyword_helpers.py  # Keyword filter for search
+│   ├── parsers.py          # Log line parsing
+│   └── requirements.txt
+├── frontend/               # Next.js UI
+├── samples/                # Example log files for demos
+├── tests/                  # Pytest (API smoke + unit tests)
+├── docs/screenshots/       # Add demo screenshots for your portfolio
 └── README.md
 ```
 
@@ -183,12 +225,22 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 - `POST /api/upload` - Upload log files
 - `POST /api/search` - Search in logs (optional body field `keyword_only`; default favors literal keyword matches)
 - `POST /api/ask` - Ask questions about logs (RAG)
-- `POST /api/summarize` - Summarize by `file_id` (basic stats; see API docs)
-- `GET /api/anomalies` - Get detected anomalies
-- `GET /api/timeline` - Get event timeline (optional `file_id` query)
+- `POST /api/summarize` - Basic stats for a file (event/error counts)
+- `GET /api/anomalies` - ERROR / CRITICAL / WARN events (most recent 100)
+- `GET /api/timeline` - Event timeline (optional `file_id` query)
 - `GET /api/file/{file_id}/status` - File processing status
 
 See http://localhost:8000/docs for interactive API documentation.
+
+## Tests
+
+From the repository root (after `pip install -r backend/requirements.txt -r backend/requirements-dev.txt`):
+
+```bash
+python -m pytest
+```
+
+CI runs backend tests and frontend ESLint on push/PR to `main`.
 
 ## Development shortcuts
 

@@ -10,13 +10,14 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from parsers import parse_log_file
-from db import init_db, insert_file_record, mark_file_parsed, insert_events_bulk, get_file_status, get_event, get_log_events, file_exists
+from db import init_db, insert_file_record, mark_file_parsed, insert_events_bulk, get_file_status, get_event, get_log_events, file_exists, DB_PATH
 from embeddings import (
     EmbeddingIndex,
     DEFAULT_MAX_L2_DISTANCE,
     DEFAULT_RELEVANCE_MARGIN,
     USE_DISTANCE_FILTER,
 )
+from keyword_helpers import filter_sort_keyword_hits as _filter_sort_keyword_hits
 from openai import OpenAI
 
 # Load environment variables from .env file
@@ -48,42 +49,15 @@ SEARCH_SEMANTIC_POOL = min(
     10000,
 )
 
+ENABLE_DEBUG_ENDPOINT = os.environ.get('ENABLE_DEBUG_ENDPOINT', '').lower() in ('1', 'true', 'yes')
 
-def _search_terms(query: str) -> list[str]:
-    """Lowercased tokens (length >= 2) used for substring match in log lines."""
-    return [t.lower() for t in query.split() if len(t) >= 2]
-
-
-def _keyword_match_score(text: str, terms: list[str]) -> int:
-    if not text or not terms:
-        return 0
-    blob = text.lower()
-    return sum(1 for w in terms if w in blob)
-
-
-def _filter_sort_keyword_hits(pool: list, query: str) -> list:
-    """Keep only rows whose text contains at least one query term; best matches first."""
-    terms = _search_terms(query)
-    if not terms:
-        return pool
-    scored = []
-    for r in pool:
-        text = r.get('text') or ''
-        s = _keyword_match_score(text, terms)
-        if s > 0:
-            scored.append((r, s))
-    scored.sort(key=lambda x: (-x[1], x[0].get('distance', 0)))
-    return [r for r, _ in scored]
-
-
-@app.get("/api/debug/env")
-async def debug_env():
-    return JSONResponse({
-        "OPENAI_API_KEY_exists": OPENAI_API_KEY is not None,
-        "OPENAI_API_KEY_length": len(OPENAI_API_KEY) if OPENAI_API_KEY else 0,
-        "OPENAI_API_KEY_starts_with_sk": OPENAI_API_KEY.startswith('sk-') if OPENAI_API_KEY else False,
-        "OPENAI_MODEL": OPENAI_MODEL
-})
+if ENABLE_DEBUG_ENDPOINT:
+    @app.get("/api/debug/env")
+    async def debug_env():
+        return JSONResponse({
+            "OPENAI_API_KEY_configured": OPENAI_API_KEY is not None,
+            "OPENAI_MODEL": OPENAI_MODEL,
+        })
 
 @app.post("/api/upload")
 async def upload(file: UploadFile = File(...)):
@@ -277,7 +251,6 @@ async def ask(payload: dict):
             )
     return JSONResponse({
         'answer': answer,
-        'prompt': prompt,
         'evidence': results
     })
 
@@ -310,7 +283,7 @@ async def summarize(payload: dict):
 @app.get("/api/anomalies")
 async def anomalies():
     # Get anomalies from database (ERROR and CRITICAL level events)
-    conn = sqlite3.connect('./data/metadata.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute('''
         SELECT id, file_id, line_no, ts, level, source, message, asset 
@@ -344,7 +317,7 @@ async def anomalies():
 #GET /api/timeline
 @app.get("/api/timeline")
 async def timeline(file_id: str = None):
-    conn = sqlite3.connect('./data/metadata.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     
     if file_id:

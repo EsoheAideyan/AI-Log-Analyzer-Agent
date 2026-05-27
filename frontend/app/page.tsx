@@ -36,7 +36,7 @@ export default function Home() {
                 Search
               </h2>
               <p className="text-gray-600">
-                Find what you're looking for using simple words
+                Find what you&apos;re looking for using simple words
               </p>
             </div>
           </Link>
@@ -74,7 +74,7 @@ export default function Home() {
                 <div className="text-3xl mb-2">1️⃣</div>
                 <h4 className="font-semibold text-gray-900 mb-2">Upload</h4>
                 <p className="text-gray-600 text-sm">
-                  Upload your log files. We'll automatically read and organize them.
+                  Upload your log files. We&apos;ll automatically read and organize them.
                 </p>
               </div>
               <div>

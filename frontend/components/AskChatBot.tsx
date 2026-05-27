@@ -4,12 +4,19 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import PaginationControls from '@/components/PaginationControls';
+import { type Event } from '@/components/EventTable';
+
+interface AskResponse {
+    answer: string;
+    evidence?: Event[];
+    no_grounding_match?: boolean;
+}
 
 const EVIDENCE_PAGE_SIZE = 10;
 
 export default function AskChatBot() {
     const [query, setQuery] = useState('');
-    const [response, setResponse] = useState<any>(null);
+    const [response, setResponse] = useState<AskResponse | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>('');
     const [evidencePage, setEvidencePage] = useState(1);
@@ -69,7 +76,7 @@ export default function AskChatBot() {
     }
 
     const scopedFileId = searchParams.get('file_id');
-    const evidenceList: any[] = response?.evidence ?? [];
+    const evidenceList: Event[] = response?.evidence ?? [];
     const evidencePaged = evidenceList.slice(
         (evidencePage - 1) * EVIDENCE_PAGE_SIZE,
         evidencePage * EVIDENCE_PAGE_SIZE
@@ -121,7 +128,7 @@ export default function AskChatBot() {
                         <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                             <h3 className="font-semibold mb-2 text-gray-900">Evidence ({evidenceList.length} results):</h3>
                             <div className="space-y-2">
-                                {evidencePaged.map((item: any, idx: number) => (
+                                {evidencePaged.map((item, idx) => (
                                     <div key={(evidencePage - 1) * EVIDENCE_PAGE_SIZE + idx} className="p-2 bg-white rounded border border-blue-200">
                                         <div className="text-sm text-gray-900">
                                             {item.level} | {item.source} | {item.ts}
