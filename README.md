@@ -2,7 +2,7 @@
 
 A full-stack **RAG (Retrieval-Augmented Generation)** app for SCADA and field-operation logs: upload logs, search with embeddings + keyword filtering, ask grounded questions via OpenAI, and review errors on a dashboard.
 
-## What this is (plain English)
+## What this is
 
 If you work with log files and need to **find problems quickly**, **ask questions in normal language**, or **see what happened over time**, this app helps. You upload logs through a simple web page; the system reads them, indexes them, and lets you search, chat with an AI assistant about them, and view errors and timelines on a dashboard.
 
